@@ -3,6 +3,7 @@
 Requirements
 ---------------------------
 Mandatory Requirements for Full Credit:<br>
+
 1. The system must be networked with a reasonable user interface for users. This user interface doesn't need to be fancy or complex – it can even be a <br>completely command-line system. But if you are expecting user input, you must lay this out in a way that makes it very clear what a user should input and how to do it.
 
 2. The system must be of some practical use to some user group, which needs to be specified clearly.<br>
