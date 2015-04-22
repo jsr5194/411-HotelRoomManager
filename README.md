@@ -1,5 +1,51 @@
 # 411-HotelRoomManager
 
+How to Start: Server
+--------------------------
+Run the program with one command line arg to represent port. <br>
+Remember to select a port number outside the reserved range<br>
+
+Common Usage:<br>
+java ReservationServer [PORT]<br>
+<br><br>
+Example:<br>
+java ReservationServer 12345<br>
+
+
+
+How to Start: Client
+--------------------------
+Run the program with two command line args to represent server ip and port. 
+Remember to select the port number that the server is listening on<br>
+
+Common Usage:<br>
+java ReservationClient [SERVER_IP] [PORT]<br>
+<br><br>
+Example:<br>
+java ReservationClient 127.0.0.1 12345<br>
+
+
+How to Operate: Client
+--------------------------
+There are a few commands that can be run at this time to retrieve or
+update information in the hotel. They are explained below. To run any command,
+simply type the specified command and any necessary arguments into the client.
+NOTE: All commands will start with a slash (/)<br>
+
+Command: 		/displayrooms<br>
+Description: 	This command will print out all of the rooms in the hotel
+				along with their current availibility<br>
+
+Command: 		/set [ROOM_NUMBER] [AVAILIBILITY_BOOL]<br>
+Description: 	This command will update the availibility status of a specified
+				room. It requires two paramaters. The first is the room number
+				that will be changed. The second is a boolean (spelled in 
+				agreement with java spec) which will set the availibility of the 
+				room. <br>
+				true	==	availible<br>
+				false	==	occupied<br>
+
+
 Requirements
 ---------------------------
 Mandatory Requirements for Full Credit:<br>
