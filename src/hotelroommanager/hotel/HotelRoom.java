@@ -12,25 +12,31 @@ import java.io.*;
 public class HotelRoom implements Serializable
 {
 	private int roomNumber;
+  private int price;
+  private int maxOccupants;
 	private int numQueenBeds;
 	private int numDoubleBeds;
 	private boolean isAvailable;
-	private int occupantId;
+  private Guest guest;
 
 /**
   * Class Constructor
   *
-  * @param  passedRoomNumber:  	room number for this hotel room
-  * @param  passedNumQ:  		number of queen beds contained
-  * @param  passedNumD: 		number of double beds contained
+  * @param  passedRoomNumber:  	 room number for this hotel room
+  * @param  passedPrice:         nightly cost for the room
+  * @param  passedMaxOccupants:  maximum number of occupants for the room
+  * @param  passedNumQ:  		     number of queen beds contained
+  * @param  passedNumD: 		     number of double beds contained
   * @see    HotelRoom
   */
-	public HotelRoom(int passedRoomNumber, int passedNumQ, int passedNumD){
+	public HotelRoom(int passedRoomNumber, int passedPrice, int passedMaxOccupants, int passedNumQ, int passedNumD){
 		this.roomNumber = passedRoomNumber;
+    this.price = passedPrice;
+    this.maxOccupants = passedMaxOccupants;
 		this.numQueenBeds = passedNumQ;
 		this.numDoubleBeds = passedNumD;
 		this.isAvailable = true; //initially occupied
-		this.occupantId = -1; //-1 means no occupant
+    this.guest = null;
 	}
 
 /**
@@ -44,6 +50,32 @@ public class HotelRoom implements Serializable
 	public int getRoomNumber(){
 		return this.roomNumber;
 	}
+
+/**
+  * Accessor
+  *
+  *   Gets a the price per night that
+  *   this room costs
+  *
+  * @return this.price
+  * @see    getPrice
+  */
+  public int getPrice(){
+    return this.price;
+  }
+
+/**
+  * Accessor
+  *
+  *   Gets a the total number of occupants that
+  *   this room can support
+  *
+  * @return this.maxOccupants
+  * @see    getMaxOccupants
+  */
+  public int getMaxOccupants(){
+    return this.maxOccupants;
+  }
 
 /**
   * Accessor
@@ -83,18 +115,18 @@ public class HotelRoom implements Serializable
 		return this.isAvailable;
 	}
 
-/**
+  /**
   * Accessor
   *
-  *		Gets a the id of the current room's occupant.
-  *		If the room is empty, this value will be -1
+  *   Gets the guest object for the current room
   *
-  * @return this.occupantId
-  * @see    getOccupantId
+  * @return this.guest
+  * @see    getGuest
   */
-	public int getOccupantId(){
-		return this.occupantId;
-	}
+  public Guest getGuest(){
+    return this.guest;
+  }
+
 
 /**
   * Mutator
@@ -111,12 +143,12 @@ public class HotelRoom implements Serializable
 /**
   * Mutator
   *
-  *		updates the availability of a given room
+  *   updates the guest of a given room
   *
-  * @param  newId	an int specifying the new occupant's id for the current room
-  * @see    updateOccupantId
+  * @param  curGuest    a Guest object containing information on the person in the room
+  * @see    updateGuest
   */
-	public void updateOccupantId(int newId){
-		this.occupantId = newId;
-	}
+  public void updateGuest(Guest curGuest){
+    this.guest = curGuest;
+  }
 }

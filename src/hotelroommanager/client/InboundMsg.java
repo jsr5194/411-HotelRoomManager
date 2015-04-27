@@ -19,6 +19,7 @@ public class InboundMsg extends Thread
 {
 	//handle back to the client who created this thread
 	private Socket client;
+	private ReservationParamsCntl rpc;
 
 
 /**
@@ -27,8 +28,9 @@ public class InboundMsg extends Thread
   * @param  passedClient:  the client who called this thread
   * @see    InboundMsg
   */
-	public InboundMsg(Socket passedClient){
+	public InboundMsg(Socket passedClient, ReservationParamsCntl passedRpc){
 		this.client = passedClient;
+		this.rpc = passedRpc;
 	}
 
 
@@ -63,9 +65,10 @@ public class InboundMsg extends Thread
 								currentState = "Occupied";
 							}
 
-							System.out.println("First room: "+currentRoom.getRoomNumber()+" State: "+currentState);
+							//System.out.println("First room: "+currentRoom.getRoomNumber()+" State: "+currentState);
 
 						}
+						this.rpc.setHotel(hotel);
 					}catch (EOFException e){
 						objectInputStream.close();
 					}

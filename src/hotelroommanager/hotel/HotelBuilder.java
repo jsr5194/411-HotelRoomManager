@@ -19,22 +19,14 @@ public class HotelBuilder
 	public static void main(String[] args){
 		//container for all rooms in the hotel
 		ArrayList<HotelRoom> hiltonRooms = new ArrayList<HotelRoom>();
+		ArrayList<Guest> hiltonGuests = new ArrayList<Guest>();
 
-		//Build four test rooms
-		HotelRoom room100 = new HotelRoom(100, 2, 0); //Syntax: [0] = room number, [1] = numQueen, [2] = numDouble
-		hiltonRooms.add(room100);
-
-		HotelRoom room101 = new HotelRoom(101, 1, 1);
-		hiltonRooms.add(room101);
-
-		HotelRoom room102 = new HotelRoom(102, 0, 2);
-		hiltonRooms.add(room102);
-
-		HotelRoom room103 = new HotelRoom(103, 1, 0);
-		hiltonRooms.add(room103);
+		for (int i = 0; i< 20; i++){
+			hiltonRooms.add(new HotelRoom(100+i, 100*(i%3), 2+i%3, i%3, i%3));//Syntax: [0] = room number, [1] = numQueen, [2] = numDouble
+		}
 
 		//Build the hotel object
-		Hotel hilton = new Hotel(0, "Hilton", hiltonRooms);
+		Hotel hilton = new Hotel(0, "Hilton", hiltonRooms, hiltonGuests);
 
 		//Serialize the hotel object
 		try{

@@ -17,6 +17,7 @@ public class Hotel implements Serializable
 	private int id;
 	private String name;
 	private ArrayList<HotelRoom> rooms;
+  private ArrayList<Guest> guests;
 
 
 /**
@@ -28,10 +29,11 @@ public class Hotel implements Serializable
   * @param  passedRooms:  		array list of all HotelRooms
   * @see    Hotel
   */
-	public Hotel(int passedId, String passedName, ArrayList<HotelRoom> passedRooms){
+	public Hotel(int passedId, String passedName, ArrayList<HotelRoom> passedRooms, ArrayList<Guest> passedGuests){
 		this.id = passedId;
 		this.name = passedName;
 		this.rooms = passedRooms;
+    this.guests = passedGuests;
 	}
 
 /**
@@ -81,4 +83,16 @@ public class Hotel implements Serializable
 	public ArrayList<HotelRoom> getRooms(){
 		return this.rooms;
 	}
+
+/**
+  * Accessor
+  *
+  *   Gets an array list of all guests of the current hotel
+  *
+  * @return this.guests
+  * @see    getGuests
+  */
+  public ArrayList<Guest> getGuests(){
+    return this.guests;
+  }
 }

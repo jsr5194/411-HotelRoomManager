@@ -59,7 +59,8 @@ public class Connection extends Thread
 						Hotel hotel = null;
 						try{
 							//desearialize the hotel
-							FileInputStream fileIn = new FileInputStream("hotelroommanager/hotel/hilton.ser");
+
+							FileInputStream fileIn = new FileInputStream("/Users/unkn0wn/Github/411-HotelRoomManager/bin/hotelroommanager/hotel/hilton.ser");
 							ObjectInputStream serializedIn = new ObjectInputStream(fileIn);
 							hotel = (Hotel) serializedIn.readObject();
 
@@ -77,38 +78,50 @@ public class Connection extends Thread
 							return;
 						}
 					}
+
 				//Client Command
-				//sets the availibility property of a hotel room
-				//Signifier:	/set
-				//param 1:		Room Number
-				//param 2:		true or false (for isAvailable)
-					else if(curMsg.length() > 4 && curMsg.substring(0, 4).equals("/set")){
+				//builds a guest based off of the passed information
+				//Signifier:	/buildguest
+				//param 1:		first name
+				//param 2:		last name
+				//param 3:		phone
+				//param 4:		email
+					else if(curMsg.length() > 5 && curMsg.substring(0, 11).equals("/buildguest")){
 						Hotel hotel = null;
 
 						//split up the sent string to get all pieces of data
 						String[] splitMsg = curMsg.split(" ");
 
-						//ensure there are only three elements
-						if (splitMsg.length == 3){
+						//ensure there are only four elements
+						if (splitMsg.length == 5){
+
+							Guest passedGuest = new Guest(splitMsg[1],splitMsg[2],splitMsg[3],splitMsg[4]);
+
 							//try to input the updated data and searialize the hotel object
 							try{
-								FileInputStream fileIn = new FileInputStream("hotelroommanager/hotel/hilton.ser");
+								FileInputStream fileIn = new FileInputStream("/Users/unkn0wn/Github/411-HotelRoomManager/bin/hotelroommanager/hotel/hilton.ser");
 								ObjectInputStream serializedIn = new ObjectInputStream(fileIn);
 								hotel = (Hotel) serializedIn.readObject();
 
 								ArrayList<HotelRoom> rooms = hotel.getRooms();
-								for (HotelRoom curRoom : rooms){
-									if (curRoom.getRoomNumber() == Integer.parseInt(splitMsg[1])){
-										curRoom.updateAvailability(Boolean.parseBoolean(splitMsg[2]));
+								boolean guestExists = false;
+								for (Guest curGuest : hotel.getGuests()){
+									if (curGuest.equals(passedGuest)){
+										guestExists = true;
 									}
 								}
+								if(!guestExists){
+									hotel.getGuests().add(passedGuest);
+								}else{
+									System.out.println("Guest already exists");
+								}
 
-								FileOutputStream fileOut = new FileOutputStream("hotelroommanager/hotel/hilton.ser");
+								FileOutputStream fileOut = new FileOutputStream("/Users/unkn0wn/Github/411-HotelRoomManager/bin/hotelroommanager/hotel/hilton.ser");
 								ObjectOutputStream out = new ObjectOutputStream(fileOut);
 								out.writeObject(hotel);
 								out.close();
 								fileOut.close();
-								System.out.printf("Serialized data is saved in hotelroommanager/hotel/hilton.ser\n");
+								System.out.printf("Serialized data is saved in /Users/unkn0wn/Github/411-HotelRoomManager/bin/hotelroommanager/hotel/hilton.ser\n");
 							}catch(ClassNotFoundException c){
 								System.out.println("Hotel class not found");
 								c.printStackTrace();
@@ -118,6 +131,58 @@ public class Connection extends Thread
 							}catch(NumberFormatException e){
 								System.out.println("Number format exception. Try again");
 							}
+						}
+					}
+				
+				//Client Command
+				//sets the availibility property of a hotel room
+				//Signifier:	/toggleroomstate
+				//param 1:		Room Number
+				//param 2:		true or false (for isAvailable)
+					else if(curMsg.length() > 6 && curMsg.substring(0, 16).equals("/toggleroomstate")){
+						Hotel hotel = null;
+
+						//split up the sent string to get all pieces of data
+						String[] splitMsg = curMsg.split(" ");
+
+						//ensure there are only four elements
+						if (splitMsg.length == 4){
+							//try to input the updated data and searialize the hotel object
+							try{
+								FileInputStream fileIn = new FileInputStream("/Users/unkn0wn/Github/411-HotelRoomManager/bin/hotelroommanager/hotel/hilton.ser");
+								ObjectInputStream serializedIn = new ObjectInputStream(fileIn);
+								hotel = (Hotel) serializedIn.readObject();
+
+								ArrayList<HotelRoom> rooms = hotel.getRooms();
+								for (HotelRoom curRoom : rooms){
+									if (curRoom.getRoomNumber() == Integer.parseInt(splitMsg[1])){
+										curRoom.updateAvailability(Boolean.parseBoolean(splitMsg[2]));
+										for(Guest curGuest: hotel.getGuests()){
+											if (curGuest.getEmail().equals(splitMsg[3])){
+												curRoom.updateGuest(curGuest);//updates guest based off of email
+												System.out.println("added a guest");
+											}
+										}
+									}
+								}
+
+								FileOutputStream fileOut = new FileOutputStream("/Users/unkn0wn/Github/411-HotelRoomManager/bin/hotelroommanager/hotel/hilton.ser");
+								ObjectOutputStream out = new ObjectOutputStream(fileOut);
+								out.writeObject(hotel);
+								out.close();
+								fileOut.close();
+								System.out.printf("Serialized data is saved in /Users/unkn0wn/Github/411-HotelRoomManager/bin/hotelroommanager/hotel/hilton.ser\n");
+							}catch(ClassNotFoundException c){
+								System.out.println("Hotel class not found");
+								c.printStackTrace();
+								return;
+							}catch(IOException i){
+								i.printStackTrace();
+							}catch(NumberFormatException e){
+								System.out.println("Number format exception. Try again");
+							}
+						}else{
+						System.out.println("split msg length: "+splitMsg.length);
 						}
 					}
 				}catch(IOException i){
