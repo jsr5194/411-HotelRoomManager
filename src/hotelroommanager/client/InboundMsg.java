@@ -54,20 +54,6 @@ public class InboundMsg extends Thread
 						//get the passed hotel object
 						Hotel hotel = (Hotel)objectInputStream.readObject();
 
-						//print out the current state of each hotel room
-						for (int i = 0; i < hotel.getRooms().size(); i++){
-							HotelRoom currentRoom = hotel.getRooms().get(i);
-
-							String currentState;
-							if (currentRoom.roomIsAvailable()){
-								currentState = "Available";
-							}else{
-								currentState = "Occupied";
-							}
-
-							//System.out.println("First room: "+currentRoom.getRoomNumber()+" State: "+currentState);
-
-						}
 						this.rpc.setHotel(hotel);
 					}catch (EOFException e){
 						objectInputStream.close();

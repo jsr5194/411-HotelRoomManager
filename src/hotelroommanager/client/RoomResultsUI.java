@@ -10,8 +10,10 @@ public class RoomResultsUI extends JFrame
 {
 	RoomResultsCntl theRoomResultsCntl;
 	ArrayList<HotelRoom> rooms;
+	JPanel containerPanel;
 	JScrollPane scrollPane;
 	JPanel mainPanel;
+	JButton backButton;
 
 
 	public RoomResultsUI(RoomResultsCntl passedCntl){
@@ -26,6 +28,7 @@ public class RoomResultsUI extends JFrame
 	}
 
 	public void initComponents(){
+		this.containerPanel = new JPanel(new BorderLayout());
 		this.mainPanel = new JPanel(new GridLayout(this.rooms.size()/3+1, 3, 10, 10));
 
 		if (this.rooms.size() > 0){
@@ -52,8 +55,12 @@ public class RoomResultsUI extends JFrame
 		}else{
 			this.mainPanel.add(new JLabel("No Results Found"));
 		}
+		this.backButton = new JButton("Back");
+		this.backButton.addActionListener(new BackButtonListener());
 		this.scrollPane = new JScrollPane(this.mainPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		this.add(this.scrollPane);
+		this.containerPanel.add(this.backButton, BorderLayout.NORTH);
+		this.containerPanel.add(this.scrollPane, BorderLayout.CENTER);
+		this.add(this.containerPanel);
 	}
 
 
@@ -66,6 +73,14 @@ public class RoomResultsUI extends JFrame
         public void actionPerformed(ActionEvent evt){
         	RoomResultsUI.this.theRoomResultsCntl.runBookingCntl(this.roomToBook);
         	RoomResultsUI.this.setVisible(false);
+        }
+    }
+
+    //listener for the back button
+    public class BackButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent evt){
+        	RoomResultsUI.this.setVisible(false);
+        	RoomResultsUI.this.theRoomResultsCntl.getReservationParamsCntl().showReservationParamsUI();
         }
     }
 

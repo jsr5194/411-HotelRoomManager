@@ -34,19 +34,13 @@ public class ReservationParamsCntl
 	}
 
 	public void runRoomResultsCntl(){
-		if(this.roomResultsCntl == null){
-			this.roomResultsCntl = new RoomResultsCntl(this, this.hotel, this.inDate, this.outDate, this.numOccupants, this.numQueen, this.numDouble);
-		}else{
-			this.roomResultsCntl.showRoomResultsUI();
-		}
+		this.roomResultsCntl = new RoomResultsCntl(this, this.hotel, this.inDate, this.outDate, this.numOccupants, this.numQueen, this.numDouble);
+		
 	}
 
 	public void showReservationParamsUI(){
-		if (this.reservationsParamsUI == null){
-			this.reservationsParamsUI = new ReservationParamsUI(this);
-		}else{
-			this.reservationsParamsUI.setVisible(true);
-		}
+		this.reservationsParamsUI = new ReservationParamsUI(this);
+		
 	}
 
 	public void runRoomSearch(String passedInDate, String passedOutDate, String passedNumOccupants, String passedNumQueen, String passedNumDouble){
@@ -79,11 +73,15 @@ public class ReservationParamsCntl
 
 	public void bookRoom(int roomNumber, String fname, String lname, String phone, String email){
 		try{
+
+			String inDateStr = new SimpleDateFormat("MM/dd/yyyy").format(this.inDate);
+			String outDateStr = new SimpleDateFormat("MM/dd/yyyy").format(this.outDate);
+
 			//set up output stream
 			OutputStream outToServer = this.client.getOutputStream();
 			DataOutputStream out = new DataOutputStream(outToServer);
 			out.writeUTF("/buildguest "+fname+" "+lname+" "+phone+" "+email);//TODO: YOU STILL NEED TO DO THIS
-			out.writeUTF("/toggleroomstate "+String.valueOf(roomNumber)+" false "+ email);
+			out.writeUTF("/toggleroomstate "+String.valueOf(roomNumber)+" false "+ email+" "+inDateStr+" "+outDateStr);
 			out.writeUTF("/displayrooms");
 			//DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 			//runRoomSearch(format.format(this.inDate), format.format(this.outDate), String.valueOf(this.numOccupants), String.valueOf(this.numQueen), String.valueOf(this.numDouble));

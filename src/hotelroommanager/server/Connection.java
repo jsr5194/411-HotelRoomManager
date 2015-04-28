@@ -4,6 +4,7 @@ import java.net.*;
 import java.io.*;
 import java.lang.*;
 import java.util.*;
+import java.text.*;
 import hotelroommanager.hotel.*;
 
 /**
@@ -103,7 +104,6 @@ public class Connection extends Thread
 								ObjectInputStream serializedIn = new ObjectInputStream(fileIn);
 								hotel = (Hotel) serializedIn.readObject();
 
-								ArrayList<HotelRoom> rooms = hotel.getRooms();
 								boolean guestExists = false;
 								for (Guest curGuest : hotel.getGuests()){
 									if (curGuest.equals(passedGuest)){
@@ -139,32 +139,52 @@ public class Connection extends Thread
 				//Signifier:	/toggleroomstate
 				//param 1:		Room Number
 				//param 2:		true or false (for isAvailable)
+				//param 3: 		email of reserving guest
+				//param 4:		check in date
+				//param 5:		check out date
 					else if(curMsg.length() > 6 && curMsg.substring(0, 16).equals("/toggleroomstate")){
 						Hotel hotel = null;
 
 						//split up the sent string to get all pieces of data
 						String[] splitMsg = curMsg.split(" ");
 
+						System.out.println(splitMsg.length);
+						System.out.println("Heres your stuff: "+splitMsg[4] +" "+splitMsg[5]);
 						//ensure there are only four elements
-						if (splitMsg.length == 4){
+						if (splitMsg.length == 6){
 							//try to input the updated data and searialize the hotel object
 							try{
 								FileInputStream fileIn = new FileInputStream("/Users/unkn0wn/Github/411-HotelRoomManager/bin/hotelroommanager/hotel/hilton.ser");
 								ObjectInputStream serializedIn = new ObjectInputStream(fileIn);
 								hotel = (Hotel) serializedIn.readObject();
 
-								ArrayList<HotelRoom> rooms = hotel.getRooms();
-								for (HotelRoom curRoom : rooms){
-									if (curRoom.getRoomNumber() == Integer.parseInt(splitMsg[1])){
-										curRoom.updateAvailability(Boolean.parseBoolean(splitMsg[2]));
-										for(Guest curGuest: hotel.getGuests()){
-											if (curGuest.getEmail().equals(splitMsg[3])){
-												curRoom.updateGuest(curGuest);//updates guest based off of email
-												System.out.println("added a guest");
+								//TODO:
+								//HANDLE PARSING OF DATE HERE
+								ArrayList<Day> days = hotel.getCalendar().getDays();
+								DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+								Date checkIn = df.parse(splitMsg[4]);
+								Date checkOut = df.parse(splitMsg[5]);
+
+								for (Day curDay : days){
+									if ((curDay.getDate().after(checkIn) && curDay.getDate().before(checkOut)) || curDay.getDate().equals(checkIn) || curDay.getDate().equals(checkOut)){
+										ArrayList<HotelRoom> rooms = curDay.getRooms();
+										System.out.println(rooms);
+										for (HotelRoom curRoom : rooms){
+											if (curRoom.getRoomNumber() == Integer.parseInt(splitMsg[1])){
+												curRoom.updateAvailability(Boolean.parseBoolean(splitMsg[2]));
+												System.out.println("Room: "+curRoom.getRoomNumber()+ " set to "+Boolean.parseBoolean(splitMsg[2]));
+												for(Guest curGuest: hotel.getGuests()){
+													if (curGuest.getEmail().equals(splitMsg[3])){
+														curRoom.updateGuest(curGuest);//updates guest based off of email
+														System.out.println("added a guest");
+													}
+												}
 											}
 										}
 									}
 								}
+
+								
 
 								FileOutputStream fileOut = new FileOutputStream("/Users/unkn0wn/Github/411-HotelRoomManager/bin/hotelroommanager/hotel/hilton.ser");
 								ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -172,6 +192,8 @@ public class Connection extends Thread
 								out.close();
 								fileOut.close();
 								System.out.printf("Serialized data is saved in /Users/unkn0wn/Github/411-HotelRoomManager/bin/hotelroommanager/hotel/hilton.ser\n");
+							}catch(ParseException i){
+								i.printStackTrace();
 							}catch(ClassNotFoundException c){
 								System.out.println("Hotel class not found");
 								c.printStackTrace();

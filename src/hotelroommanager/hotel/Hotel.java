@@ -16,7 +16,7 @@ public class Hotel implements Serializable
 {
 	private int id;
 	private String name;
-	private ArrayList<HotelRoom> rooms;
+	private Month calendar;
   private ArrayList<Guest> guests;
 
 
@@ -26,13 +26,13 @@ public class Hotel implements Serializable
   * @param  passedId:  			hotel ID to allow for differentiation between chain hotels (i.e. two Hiltons)
   * @param  passedName:  		user friendly hotel name
   * @param  passedTotalRooms: 	total rooms in the hotel
-  * @param  passedRooms:  		array list of all HotelRooms
+  * @param  passedCalendar:  		a month variable holding all dates for the hotel
   * @see    Hotel
   */
-	public Hotel(int passedId, String passedName, ArrayList<HotelRoom> passedRooms, ArrayList<Guest> passedGuests){
+	public Hotel(int passedId, String passedName, Month passedCalendar, ArrayList<Guest> passedGuests){
 		this.id = passedId;
 		this.name = passedName;
-		this.rooms = passedRooms;
+		this.calendar = passedCalendar;
     this.guests = passedGuests;
 	}
 
@@ -68,20 +68,21 @@ public class Hotel implements Serializable
   * @return this.rooms.size()
   * @see    getTotalRooms
   */
+  /*
 	public int getTotalRooms(){
 		return this.rooms.size();
-	}
+	}*/
 
 /**
   * Accessor
   *
-  *		Gets an array list of all rooms of the current hotel
+  *		Gets the calendar of the current hotel
   *
-  * @return this.rooms
-  * @see    getRooms
+  * @return this.calendar
+  * @see    getCalendar
   */
-	public ArrayList<HotelRoom> getRooms(){
-		return this.rooms;
+	public Month getCalendar(){
+		return this.calendar;
 	}
 
 /**

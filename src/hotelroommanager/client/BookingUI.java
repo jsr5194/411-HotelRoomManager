@@ -12,10 +12,12 @@ public class BookingUI extends JFrame
 	HotelRoom roomToBook;
 
 	JPanel mainPanel;
+	JPanel buttonsPanel;
 	JPanel informationPanel;
 
 	JLabel titleLabel;
 	JButton confirmButton;
+	JButton backButton;
 
 	JLabel roomTitle;
 	JLabel roomNumber;
@@ -53,6 +55,7 @@ public class BookingUI extends JFrame
 
 	public void initComponents(){
 		this.mainPanel = new JPanel(new BorderLayout());
+		this.buttonsPanel = new JPanel();
 		this.informationPanel = new JPanel(new GridLayout(6, 2));
 		this.fnamePanel = new JPanel();
 		this.lnamePanel = new JPanel();
@@ -78,11 +81,14 @@ public class BookingUI extends JFrame
 		this.guestEmailLabel = new JLabel("E-mail address: ");
 		this.guestEmailField = new JTextField(10);
 
-		this.titleLabel = new JLabel("Resrvation Booking", SwingConstants.CENTER);
+		this.titleLabel = new JLabel("Reservation Booking", SwingConstants.CENTER);
 		this.titleLabel.setFont(new Font("Arial", Font.PLAIN, 50));
 
 		this.confirmButton = new JButton("Confirm Booking");
 		this.confirmButton.addActionListener(new BookingListener());
+
+		this.backButton = new JButton("Back");
+		this.backButton.addActionListener(new BackButtonListener());
 
 		this.fnamePanel.add(this.guestFnameLabel);
 		this.fnamePanel.add(this.guestFnameField);
@@ -104,9 +110,11 @@ public class BookingUI extends JFrame
 		this.informationPanel.add(this.roomQueens);
 		this.informationPanel.add(this.emailPanel);
 		this.informationPanel.add(this.roomDoubles);
+		this.buttonsPanel.add(this.backButton);
+		this.buttonsPanel.add(this.confirmButton);
 		this.mainPanel.add(this.titleLabel, BorderLayout.NORTH);
 		this.mainPanel.add(this.informationPanel, BorderLayout.CENTER);
-		this.mainPanel.add(this.confirmButton, BorderLayout.SOUTH);
+		this.mainPanel.add(this.buttonsPanel, BorderLayout.SOUTH);
 		this.add(this.mainPanel);
 	}
 
@@ -121,6 +129,14 @@ public class BookingUI extends JFrame
         	BookingUI.this.theBookingCntl.startBooking(fname, lname, phone, email);
         	BookingUI.this.setVisible(false);
         	BookingUI.this.theBookingCntl.showConfirmationUI();
+        }
+    }
+
+    //listener for the back button
+    public class BackButtonListener implements ActionListener{
+        public void actionPerformed(ActionEvent evt){
+        	BookingUI.this.setVisible(false);
+        	BookingUI.this.theBookingCntl.getRoomResultsCntl().showRoomResultsUI();
         }
     }
 }

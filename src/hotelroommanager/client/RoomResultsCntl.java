@@ -1,6 +1,7 @@
 package hotelroommanager.client;
 
 import java.util.*;
+import java.text.*;
 import hotelroommanager.hotel.*;
 
 public class RoomResultsCntl
@@ -31,29 +32,34 @@ public class RoomResultsCntl
 
 	public ArrayList<HotelRoom> getRoomResults(){
 		ArrayList<HotelRoom> availableRooms = new ArrayList<HotelRoom>();
-		ArrayList<HotelRoom> rooms = hotel.getRooms();
-		for (HotelRoom room : rooms){
-			if (room.roomIsAvailable() && room.getNumQueenBeds() >= this.numQueen && room.getNumDoubleBeds() >= this.numDouble){
-				availableRooms.add(room);
+
+		boolean roomStillAvailable = true;
+		for(Day curDay : hotel.getCalendar().getDays()){
+			if ((curDay.getDate().after(inDate) && curDay.getDate().before(outDate)) || curDay.getDate().equals(inDate) || curDay.getDate().equals(outDate)){
+				
+			String curdatestr = new SimpleDateFormat("MM/dd/yyyy").format(curDay.getDate());
+			System.out.println("Cur day num: "+curdatestr);
+				ArrayList<HotelRoom> rooms = curDay.getRooms();
+				for (HotelRoom room : rooms){
+					if (room.roomIsAvailable() && room.getNumQueenBeds() >= this.numQueen && room.getNumDoubleBeds() >= this.numDouble){
+						availableRooms.add(room);
+					}
+				}
 			}
 		}
 		return availableRooms;
 	}
 
+	public ReservationParamsCntl getReservationParamsCntl(){
+		return this.theReservationParamsCntl;
+	}
+
 	public void showRoomResultsUI(){
-		if (this.roomResultsUI == null){
-			this.roomResultsUI = new RoomResultsUI(this);
-		}else{
-			this.roomResultsUI.setVisible(true);
-		}
+		this.roomResultsUI = new RoomResultsUI(this);
 	}
 
 	public void runBookingCntl(int roomToBook){
-		if(this.theBookingCntl == null){
-			this.theBookingCntl = new BookingCntl(this, roomToBook);
-		}else{
-			this.theBookingCntl.showBookingUI();
-		}
+		this.theBookingCntl = new BookingCntl(this, roomToBook);
 	}
 
 	public void bookRoom(int roomToBook, String fname, String lname, String phone, String email){

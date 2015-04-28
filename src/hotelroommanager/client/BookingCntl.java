@@ -20,20 +20,16 @@ public class BookingCntl
 		showBookingUI();
 	}
 
+	public RoomResultsCntl getRoomResultsCntl(){
+		return this.roomResultsCntl;
+	}
+
 	public void showBookingUI(){
-		if (this.bookingUI == null){
-			this.bookingUI = new BookingUI(this);
-		}else{
-			this.bookingUI.setVisible(true);
-		}
+		this.bookingUI = new BookingUI(this);
 	}
 
 	public void showConfirmationUI(){
-		if (this.confirmationUI == null){
-			this.confirmationUI = new ConfirmationUI(this);
-		}else{
-			this.confirmationUI.setVisible(true);
-		}
+		this.confirmationUI = new ConfirmationUI(this);
 	}
 
 	public HotelRoom getRoomToBook(){
