@@ -36,7 +36,10 @@ Command: 		/displayrooms<br>
 Description: 	This command will print out all of the rooms in the hotel
 				along with their current availibility<br>
 
-Command: 		/set [ROOM_NUMBER] [AVAILIBILITY_BOOL]<br>
+Command: 		/buildguest [FIRST_NAME] [LAST_NAME] [PHONE] [EMAIL]<br>
+Description: 	This command will create a new guest object on the hotel<br>
+
+Command: 		/toggleroomstate [ROOM_NUMBER] [AVAILIBILITY_BOOL] [RESERVER_EMAIL] [CHECK_IN_DATE] [CHECK_OUT_DATE]<br>
 Description: 	This command will update the availibility status of a specified
 				room. It requires two paramaters. The first is the room number
 				that will be changed. The second is a boolean (spelled in 
